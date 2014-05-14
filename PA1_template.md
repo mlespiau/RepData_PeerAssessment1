@@ -115,4 +115,20 @@ median(stepsByDay[, 2], na.rm = TRUE)
 ```
 
 
+The mean is the same that the one calculated by ignoring the missing values but the median is sligtly different. Having replaced missing values with averages makes the distribution to grow in it's center as the new considered values correspond to averages.   
+
 ## Are there differences in activity patterns between weekdays and weekends?
+
+As we can see in the plot below, there are some differences between weekdays and weekends regarding the intervals and the quantity of specs. It seems that on Weekends, the overall number of steps is lower and the intervals are slightly shifted to the right (later hours).
+
+
+```r
+all$dayType <- ifelse(weekdays(all$date) %in% c("Saturday", "Sunday"), "Weekend", 
+    "Weekday")
+library(ggplot2)
+ggplot(all, aes(x = interval, y = steps)) + geom_line() + facet_wrap(~dayType, 
+    nrow = 2)
+```
+
+![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9.png) 
+
