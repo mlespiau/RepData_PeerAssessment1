@@ -67,7 +67,52 @@ avgByInterval[avgByInterval$steps == max(avgByInterval$steps), ][, 1]
 
 
 ## Imputing missing values
+The data set has the following number of missing values:
 
+|           Row| # missing values                   |
+|-------------:|-----------------------------------:|
+|         Steps| 2304|
+|          Date| 0|
+|      Interval| 0|
+
+This means there are 2304 rows with missing values in the data set. We could complete those values by using the mean for that interval. 
+
+
+```r
+all <- merge(data, avgByInterval, by.x = "interval", by.y = "interval")
+all$steps <- ifelse(is.na(all$steps.x), all$steps.y, all$steps.x)
+all <- all[, c("steps", "date", "interval")]
+```
+
+
+And here is a histogram of steps taken by day, the number of steps taken each day must be aggregated before drawing the histogram.
+
+```r
+stepsByDay <- aggregate(. ~ date, data = all, sum)
+hist(stepsByDay[, 2], main = "Frequency of total number of steps taken each day", 
+    col = "blue", xlab = "Steps taken each day")
+```
+
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7.png) 
+
+
+Then the new mean and median are calculated:
+
+```r
+mean(stepsByDay[, 2], na.rm = TRUE)
+```
+
+```
+## [1] 10766
+```
+
+```r
+median(stepsByDay[, 2], na.rm = TRUE)
+```
+
+```
+## [1] 10766
+```
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
